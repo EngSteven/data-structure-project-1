@@ -1,0 +1,21 @@
+# depslib dependency file v1.0
+1682559319 source:c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\tareas\tarea_4\minheap\main.cpp
+	<iostream>
+	<time.h>
+	<limits>
+	<conio.h>
+	"ArrayList.h"
+	"MinHeap.h"
+
+1679520413 c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\tareas\tarea_4\minheap\include\arraylist.h
+	<stdexcept>
+	<iostream>
+	"List.h"
+
+1682533421 c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\tareas\tarea_4\minheap\include\list.h
+
+1682550912 c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\tareas\tarea_4\minheap\include\minheap.h
+	<stdexcept>
+	<iostream>
+	"ArrayList.h"
+
