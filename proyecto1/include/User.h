@@ -11,12 +11,10 @@ public:
     string userType;
     int priority;
 
-    /*
     User(string userType, int priority){
         this->userType = userType;
         this->priority = priority;
     }
-    */
 
     User(){}
 

@@ -131,6 +131,10 @@ public:
         cout << "]" << endl;
     }
 
+    E getElement(int pos){
+        return elements[pos];
+    }
+
 };
 
 #endif // MINHEAP_H

@@ -9,22 +9,20 @@
 
 using namespace std;
 
-//template <typename E>
 class Area{;
 public:
     string description;
     string code;
     List<string> *windows;
-    MinHeap<Tiquet> *queues;
-
-    //int aPriority;
+    MinHeap<Tiquet> *tiquets;
 
     Area(){}
 
-    Area(int nWindows, string code){
-        //windows = new ArrayList<int>(nWindows);
-        queues = new MinHeap<Tiquet>;
+    Area(string description, int nWindows, string code){
+        tiquets = new MinHeap<Tiquet>;
         windows = new ArrayList<string>(nWindows);
+        this->code = code;
+        this->description = description;
 
         for(int i=0; i<nWindows; i++){
             string aux = code;
@@ -60,20 +58,32 @@ public:
     }
 
     void addTiquet(Tiquet tiquet){
-        queues->insert(tiquet);
+        tiquets->insert(tiquet);
+    }
+
+    void setWindows(int nWindows){
+
+        for(int i=0; i<nWindows; i++){
+            string aux = code;
+            code += to_string(i+1);
+            windows->append(code);
+            code = aux;
+        }
     }
 
     List<string> * getWindows()const {
         return windows;
     }
 
-    MinHeap<Tiquet> *getQueues() const{
-        return queues;
+    MinHeap<Tiquet> *getTiquets() const{
+        return tiquets;
     }
 
     void operator = (Area &other){
         description = other.description;
         code = other.code;
+        windows = other.windows;
+        tiquets = other.tiquets;
     }
 
     bool operator == (const Area &other){
@@ -99,11 +109,10 @@ public:
     bool operator != (const Area &other){
         return code != other.code;
     }
-
 };
 
 ostream& operator <<(ostream & os,const Area &pair){
-    os << "(" << pair.description << ", " << pair.code << ")";
+    os << "(" << pair.description << ", " << pair.code << ", " << pair.windows << ", " << pair.tiquets << ")";
     return os;
 }
 

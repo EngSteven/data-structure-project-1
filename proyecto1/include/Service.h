@@ -13,7 +13,9 @@ public:
     int priority;
     Area area;
 
-    Service(Area area){
+    Service(string operation, int priority, Area area){
+        this->operation = operation;
+        this->priority = priority;
         this->area = area;
     }
 
@@ -52,6 +54,7 @@ public:
     void operator = (Service &other){
         operation = other.operation;
         priority = other.priority;
+        area = other.area;
     }
 
     bool operator == (const Service &other){

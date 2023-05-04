@@ -43,3 +43,47 @@
 1682899233 c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\tareas\tarea_4\proyecto1\include\tiquet.h
 	<string>
 
+1682964383 source:c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\proyectos\proyecto1\proyecto1\main.cpp
+	<windows.h>
+	<conio.h>
+	<stdlib.h>
+	<iostream>
+	<cstdlib>
+	<time.h>
+	<limits>
+	<cstdlib>
+	<stdexcept>
+	<string>
+	"User.h"
+	"Service.h"
+	"Area.h"
+	"Tiquet.h"
+
+1682962850 c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\proyectos\proyecto1\proyecto1\include\user.h
+	<iostream>
+	<string>
+
+1682963447 c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\proyectos\proyecto1\proyecto1\include\service.h
+	<string>
+	"Area.h"
+
+1682962571 c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\proyectos\proyecto1\proyecto1\include\area.h
+	<string>
+	"ArrayList.h"
+	"MinHeap.h"
+	"Tiquet.h"
+
+1679520413 c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\proyectos\proyecto1\proyecto1\include\arraylist.h
+	<stdexcept>
+	<iostream>
+	"List.h"
+
+1679611872 c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\proyectos\proyecto1\proyecto1\include\list.h
+
+1682025501 c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\proyectos\proyecto1\proyecto1\include\minheap.h
+	<stdexcept>
+	<iostream>
+
+1682906540 c:\users\yei-1\dropbox\pc\desktop\college\semestre 3\ed\proyectos\proyecto1\proyecto1\include\tiquet.h
+	<string>
+

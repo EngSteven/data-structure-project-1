@@ -7,20 +7,27 @@ using namespace std;
 
 class Tiquet{
 public:
-    int seconds;
+    int iSeconds;
     string consecutive;
     int fPriority;
+    int nTiquete;
 
 //public:
     Tiquet(){
     }
 
-    void setSeconds(int seconds) {
-        this->seconds = seconds;
+    Tiquet(int iSeconds, string consecutive, int fPriority){
+        this->iSeconds = iSeconds;
+        this->consecutive = consecutive;
+        this->fPriority = fPriority;
     }
 
-    int getSeconds(){
-        return seconds;
+    void setISeconds(int iSeconds) {
+        this->iSeconds = iSeconds;
+    }
+
+    int getISeconds(){
+        return iSeconds;
     }
 
     void setConsecutive(string consecutive) {
@@ -39,10 +46,12 @@ public:
         return fPriority;
     }
 
+
+
     void operator = (Tiquet &other){
         fPriority = other.fPriority;
         consecutive = other.consecutive;
-        seconds = other.seconds;
+        iSeconds = other.iSeconds;
         //value =  other.value;
     }
 
@@ -72,7 +81,7 @@ public:
 };
 
 ostream& operator <<(ostream & os,const Tiquet &pair){
-    os << "(" << pair.consecutive << ", " << pair.fPriority << ")";
+    os << "(" << pair.iSeconds << ", " << pair.consecutive << ", " << pair.fPriority << ")";
     return os;
 }
 
