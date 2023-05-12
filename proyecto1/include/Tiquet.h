@@ -10,16 +10,23 @@ public:
     int iSeconds;
     string consecutive;
     int fPriority;
-    int nTiquete;
+    string window;
 
-//public:
-    Tiquet(){
-    }
+    Tiquet(){}
 
     Tiquet(int iSeconds, string consecutive, int fPriority){
         this->iSeconds = iSeconds;
         this->consecutive = consecutive;
         this->fPriority = fPriority;
+        window = "";
+    }
+
+    void setWindow(string window){
+        this->window = window;
+    }
+
+    string getWindow(){
+        return window;
     }
 
     void setISeconds(int iSeconds) {
@@ -46,13 +53,11 @@ public:
         return fPriority;
     }
 
-
-
     void operator = (Tiquet &other){
         fPriority = other.fPriority;
         consecutive = other.consecutive;
         iSeconds = other.iSeconds;
-        //value =  other.value;
+        window =  other.window;
     }
 
     bool operator == (const Tiquet &other){
@@ -81,7 +86,7 @@ public:
 };
 
 ostream& operator <<(ostream & os,const Tiquet &pair){
-    os << "(" << pair.iSeconds << ", " << pair.consecutive << ", " << pair.fPriority << ")";
+    os << "(" << pair.iSeconds << ", " << pair.consecutive << ", " << pair.fPriority << pair.window << ")";
     return os;
 }
 
