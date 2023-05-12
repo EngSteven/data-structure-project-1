@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <iostream>
 #include "List.h"
+#include "Window.h"
 
 using std::runtime_error;
 using std::cout;

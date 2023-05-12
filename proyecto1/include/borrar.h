@@ -2,11 +2,11 @@
 #define BORRAR_H
 
 
-class Borrar
+class borrar
 {
     public:
-        Borrar() {}
-        virtual ~Borrar() {}
+        borrar() {}
+        virtual ~borrar() {}
 
     protected:
 

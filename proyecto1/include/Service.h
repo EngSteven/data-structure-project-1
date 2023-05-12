@@ -12,9 +12,13 @@ public:
     string operation;
     int priority;
     Area area;
+    int nTiquets;
 
-    Service(Area area){
+    Service(string operation, int priority, Area area){
+        this->operation = operation;
+        this->priority = priority;
         this->area = area;
+        nTiquets = 0;
     }
 
     Service(){}
@@ -45,13 +49,31 @@ public:
         return this->area;
     }
 
+    Area & getAreaDirection(){
+        return area;
+    }
+
     void setArea(Area area){
         this->area = area;
+    }
+
+    void increaseNTiquets(){
+        nTiquets++;
+    }
+
+    int getNTiquets(){
+        return nTiquets;
+    }
+
+    void setNTiquets(int nTiquets){
+        this->nTiquets = nTiquets;
     }
 
     void operator = (Service &other){
         operation = other.operation;
         priority = other.priority;
+        area = other.area;
+        nTiquets = other.nTiquets;
     }
 
     bool operator == (const Service &other){
@@ -82,7 +104,7 @@ public:
 };
 
 ostream& operator <<(ostream & os,const Service &pair){
-    os << "(" << pair.operation << ", " << pair.priority << ")";
+    os << "(" << pair.operation << ", " << pair.priority << pair.nTiquets << ")";
     return os;
 }
 

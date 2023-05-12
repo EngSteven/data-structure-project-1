@@ -7,20 +7,34 @@ using namespace std;
 
 class Tiquet{
 public:
-    int seconds;
+    int iSeconds;
     string consecutive;
     int fPriority;
+    string window;
 
-//public:
-    Tiquet(){
+    Tiquet(){}
+
+    Tiquet(int iSeconds, string consecutive, int fPriority){
+        this->iSeconds = iSeconds;
+        this->consecutive = consecutive;
+        this->fPriority = fPriority;
+        window = "";
     }
 
-    void setSeconds(int seconds) {
-        this->seconds = seconds;
+    void setWindow(string window){
+        this->window = window;
     }
 
-    int getSeconds(){
-        return seconds;
+    string getWindow(){
+        return window;
+    }
+
+    void setISeconds(int iSeconds) {
+        this->iSeconds = iSeconds;
+    }
+
+    int getISeconds(){
+        return iSeconds;
     }
 
     void setConsecutive(string consecutive) {
@@ -42,8 +56,8 @@ public:
     void operator = (Tiquet &other){
         fPriority = other.fPriority;
         consecutive = other.consecutive;
-        seconds = other.seconds;
-        //value =  other.value;
+        iSeconds = other.iSeconds;
+        window =  other.window;
     }
 
     bool operator == (const Tiquet &other){
@@ -72,7 +86,7 @@ public:
 };
 
 ostream& operator <<(ostream & os,const Tiquet &pair){
-    os << "(" << pair.consecutive << ", " << pair.fPriority << ")";
+    os << "(" << pair.iSeconds << ", " << pair.consecutive << ", " << pair.fPriority << pair.window << ")";
     return os;
 }
 

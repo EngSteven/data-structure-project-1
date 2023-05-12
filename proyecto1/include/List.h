@@ -24,9 +24,10 @@ public:
     virtual bool atEnd() = 0;
     virtual int getSize() = 0;
     virtual void print() = 0;
+    virtual int  indexOf(E element) = 0;
+
 
     /*virtual bool contains(E element) = 0;
-    virtual int  indexOf(E element) = 0;
     virtual void extend(List<E> *list) = 0;
     virtual void reverse() = 0;
     virtual bool equals(List<E> *list) = 0;*/

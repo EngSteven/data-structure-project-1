@@ -1,37 +1,72 @@
 #ifndef AREA_H
 #define AREA_H
 
+#define N_COLUMNS_WINDOWS 2
+
 #include <string>
 #include "ArrayList.h"
 #include "MinHeap.h"
 #include "Tiquet.h"
+#include "Window.h"
+#include "conio.h"
 
 
 using namespace std;
 
-//template <typename E>
 class Area{;
 public:
     string description;
     string code;
-    List<string> *windows;
-    MinHeap<Tiquet> *queues;
-
-    //int aPriority;
+    List<Window> *windows;
+    MinHeap<Tiquet> *tiquets;
+    MinHeap<Tiquet> *attendTiquets;
+    int totalTime;
+    int nTiquets;
+    int nTiquetsAttended;
 
     Area(){}
 
-    Area(int nWindows, string code){
-        //windows = new ArrayList<int>(nWindows);
-        queues = new MinHeap<Tiquet>;
-        windows = new ArrayList<string>(nWindows);
+    Area(string description, int nWindows, string code){
+        tiquets = new MinHeap<Tiquet>;
+        windows = new ArrayList<Window>(nWindows);
+        attendTiquets = new MinHeap<Tiquet>;
+
+        this->code = code;
+        this->description = description;
 
         for(int i=0; i<nWindows; i++){
             string aux = code;
             code += to_string(i+1);
-            windows->append(code);
+            Window window(code);
+            windows->append(window);
             code = aux;
         }
+        totalTime = 0;
+        nTiquets = 0;
+        nTiquetsAttended = 0;
+    }
+
+    ~Area(){
+
+    }
+
+    void addTime(int time){
+        totalTime += time;
+    }
+
+    int getTotalTime(){
+        return totalTime;
+    }
+
+    void setTotalTime(int totalTime){
+        this->totalTime = totalTime;
+    }
+
+    int getAverageTime(){
+        if(nTiquetsAttended > 0){
+            return totalTime / nTiquetsAttended;
+        }
+        return 0;
     }
 
     // Getter para el atributo description
@@ -54,26 +89,69 @@ public:
         this->code = code;
     }
 
-    // Getter para el atributo windows
-    List<string>* getWindows() {
-        return windows;
-    }
-
     void addTiquet(Tiquet tiquet){
-        queues->insert(tiquet);
+        tiquets->insert(tiquet);
     }
 
-    List<string> * getWindows()const {
+    void addAttendTiquet(Tiquet tiquet){
+        attendTiquets->insert(tiquet);
+    }
+
+    MinHeap<Tiquet> * getAttendTiquets(){
+        return attendTiquets;
+    }
+
+    void setWindows(int nWindows){
+        for(int i=0; i<nWindows; i++){
+            string aux = code;
+            code += to_string(i+1);
+            Window window(code);
+            windows->append(window);
+            code = aux;
+        }
+    }
+
+    List<Window> * getWindows()const {
         return windows;
     }
 
-    MinHeap<Tiquet> *getQueues() const{
-        return queues;
+    MinHeap<Tiquet> *getTiquets() const{
+        return tiquets;
+    }
+
+    void increaseNTiquets(){
+        nTiquets++;
+    }
+
+    int getNTiquets(){
+        return nTiquets;
+    }
+
+    void setNTiquets(int nTiquets){
+        this->nTiquets = nTiquets;
+    }
+
+    void increseaNTiquetsAttended(){
+        nTiquetsAttended++;
+    }
+
+    int getNTiquetsAtteded(){
+        return nTiquetsAttended;
+    }
+
+    void setNTiquetsAttended(){
+        this->nTiquetsAttended = nTiquetsAttended;
     }
 
     void operator = (Area &other){
         description = other.description;
         code = other.code;
+        windows = other.windows;
+        tiquets = other.tiquets;
+        attendTiquets = other.attendTiquets;
+        totalTime = other.totalTime;
+        nTiquets = other.nTiquets;
+        nTiquetsAttended = other.nTiquetsAttended;
     }
 
     bool operator == (const Area &other){
@@ -99,11 +177,10 @@ public:
     bool operator != (const Area &other){
         return code != other.code;
     }
-
 };
 
 ostream& operator <<(ostream & os,const Area &pair){
-    os << "(" << pair.description << ", " << pair.code << ")";
+    os << "(" << pair.description << ", " << pair.code << ", " << pair.nTiquets << ", " << pair.nTiquetsAttended << pair.attendTiquets << pair.totalTime << ")";
     return os;
 }
 

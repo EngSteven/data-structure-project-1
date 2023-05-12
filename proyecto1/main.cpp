@@ -9,7 +9,6 @@
 #include <stdexcept>
 #include <string>
 
-
 #include "User.h"
 #include "Service.h"
 #include "Area.h"
@@ -18,10 +17,28 @@
 #define KEY_UP 72
 #define KEY_DOWN 80
 #define ENTER 13
-#define N_MENU_OPTIONS 12
-#define N_MAX_RAND_NUMBERS 99
+//#define N_MENU_OPTIONS 12
+//#define N_MAX_RAND_NUMBERS 99
 
 using namespace std;
+
+static int nTiquet = 100;
+
+// Definición de una función que utiliza la variable global
+void incNTiquet(){
+    nTiquet++;
+}
+
+int getNCurrentSeconds(){
+    //generar el tiempo
+    time_t now = time(0);
+    tm* timeinfo = localtime(&now);
+    int hour = timeinfo->tm_hour;
+    int minute = timeinfo->tm_min;
+    int second = timeinfo->tm_sec;
+    second += hour * 3600 + minute * 60;
+    return second;
+}
 
 //coloca el cursor en las coordenadas x,y, según los valores recibidos
 void gotoxy(short x, short y){
@@ -80,7 +97,117 @@ int selectOption(const char *title, string options[], int nOptions){
     return selectedOption;                      //se retorna la opción seleccionada
 }
 
+bool greaterThanMin(int min, int num){
+    if(num >= min){
+        return true;
+    }
+    cout << "\nEl numero debe ser mayor que: " << min << endl;
+    return false;
+}
+
+bool isInteger(string input){
+    if(input[0] == '-'){
+        input[0] = '0';
+    }
+
+    for(char c : input){
+        if(!isdigit(c)){
+            cout << "\nEl número debe ser entero" << endl;
+            return false;
+        }
+    }
+
+    return true;                        //si la entrada es entera retorna true
+}
+
+//solicita un número entero al usuario
+string enterIntNumber(string message, int min){
+    string input;
+
+    do {
+        cout << "\n" << message;
+        getline(cin, input);
+
+    }while((input == "") || (!isInteger(input)) || (!greaterThanMin(min, stoi(input))));
+
+    return input;
+}
+
+string enterString(string message){
+    string input;
+
+    do{
+        cout << "\n" << message;
+        getline(cin, input);
+
+    }while((input == ""));
+
+    return input;
+}
+
+void queueStatus(List<Area> * areas){
+    system("cls");
+    int nWindows, nTiquets;
+
+    for(int i = 0; i < areas->getSize(); i ++){
+        Area area = areas->getElement();
+        List<Window> *windows = area.getWindows();
+        nWindows = windows->getSize();
+
+        cout << "\n----------------------------------------------------" << endl;
+        cout << "Area: " << area.getDescription() << endl;
+        cout << "Cantidad de ventanillas: " << nWindows << endl;
+
+        cout << "Tiquetes: [ ";
+        MinHeap<Tiquet> *tiquets = area.getTiquets();
+        nTiquets = tiquets->getSize();
+
+        for(int j = 0; j < nTiquets; j++){
+            Tiquet tiquet = tiquets->getElement(j);
+            cout << tiquet.getConsecutive() << " ";
+        }
+        cout << " ]" << endl;
+
+        cout << "\nÚltimos tiquetes atendidos por ventanilla " << endl;
+        MinHeap<Tiquet> *attendTiquets = area.getAttendTiquets();
+        int nAttendTiquets = attendTiquets->getSize();
+        for(int j = 0; j < nAttendTiquets; j++){
+            Tiquet attendTiquet = attendTiquets->getElement(j);
+            string tiquetWindow = attendTiquet.getWindow();
+
+            if(tiquetWindow != ""){
+                cout << "Ventanilla: " << tiquetWindow << endl;
+                cout << "Último tiquete atendido: " << attendTiquet.getConsecutive() << endl;
+            }
+        }
+
+        areas->next();
+    }
+
+    cout << "\nPresione cualquier tecla para regresar al menu principal " << endl;
+    getch();
+}
+
+void addUserType(List<User> *& users){
+    string exit, input, userType, message;
+    int priority = 0;
+
+    message = "Ingrese el tipo de usario: ";
+    userType = enterString(message);
+
+    message = "Ingrese su prioridad: ";
+    input = enterIntNumber(message, 0);
+
+
+    priority = stoi(input);
+    User user(userType, priority);
+    users->append(user);
+}
+
 int chooseUserTypes(List<User> *& users){
+    system("cls");
+    users->goToStart();
+
     int nUserType;
     const char *title = "Tipos de usuarios"; // título del menú de opciones
     string options[users->getSize()]; // opciones disponibles de la matriz
@@ -94,29 +221,173 @@ int chooseUserTypes(List<User> *& users){
     nUserType = selectOption(title, options, users->getSize());
     users->goToPos(nUserType-1);
 
+    system("cls");
+
     return nUserType;
 }
 
-int chooseAreas(List<Area> *& areas){
-    int nAreaDescrip;
-    const char *title = "Areas disponibles"; // título del menú de opciones
-    string options[areas->getSize()]; // opciones disponibles de la matriz
+void deleteUserType(List<User> *& users){
+    int userSelected = chooseUserTypes(users);
 
-    for(int i = 0; i < areas->getSize(); i++){
+    users->goToPos(userSelected-1);
+    users->remove();
+}
+
+void userTypeMenu(List<User> *& users){
+    const char * title = "Menu de tipos de usuarios";
+    string options[] = {"Agregar", "Eliminar", "Regresar"};
+    int option = 0;
+
+    do{
+        option = selectOption(title, options, 3);
+        system("cls");
+
+        if(option == 1){
+            addUserType(users);
+        }
+
+        else if(option == 2){
+            deleteUserType(users);
+        }
+
+    }while(option != 3);
+}
+
+void addAreas(List<Area> *& areas){
+    string exit, code, description, input, message;
+    int nWindows;
+
+    message = "Ingrese la descripción del área: ";
+    description = enterString(message);
+
+    message = "Ingrese el código del área: ";
+    code = enterString(message);
+
+    message = "Ingrese la cantidad de ventallas: ";
+    input = enterIntNumber(message, 1);
+    nWindows = stoi(input);
+
+    Area area(description, nWindows, code);
+    areas->append(area);
+}
+
+int chooseAreas(List<Area> *& areas){
+    system("cls");
+    areas->goToStart();
+
+    int nAreaDescrip, nAreas;
+    const char *title = "Areas disponibles"; // título del menú de opciones
+    nAreas = areas->getSize();
+    string options[nAreas]; // opciones disponibles de la matriz
+
+    areas->goToStart();
+    for(int i = 0; i < nAreas; i++){
         Area area = areas->getElement();
         options[i] = area.getDescription();
         areas->next();
     }
 
-    nAreaDescrip = selectOption(title, options, areas->getSize());
+    nAreaDescrip = selectOption(title, options, nAreas);
     areas->goToPos(nAreaDescrip-1);
+
+    system("cls");
 
     return nAreaDescrip;
 }
 
+void windowsModify(List<Area> *& areas){
+    int areaSelected = chooseAreas(areas);
+    int nNewWindows = 0;
+    string input, message;
+
+    areas->goToPos(areaSelected-1);
+    Area area = areas->getElement();
+    List<Window> *windows = area.getWindows();
+    int nCurrentWindows = windows->getSize();
+
+    cout << "Cantidad de ventanillas actuales: " << nCurrentWindows << endl;
+
+    message = "Ingrese la cantidad de ventallas nuevas: ";
+    input = enterIntNumber(message, 1);
+    nNewWindows = stoi(input);
+
+    area.windows->clear();
+    area.setWindows(nNewWindows);
+}
+
+void deleteAreas(List<Area> *& areas, List<Service> *& services){
+    int areaSelected = chooseAreas(areas);
+
+    areas->goToPos(areaSelected-1);
+    Area area = areas->getElement();
+    area.getWindows()->clear();
+
+    services->goToStart();
+    for(int i = 0; i < services->getSize(); i++){
+        Service service = services->getElement();
+        Area aService = service.getArea();
+
+        if(area.getDescription() == aService.getDescription()){
+            services->remove();
+        }
+        services->next();
+    }
+    areas->remove();
+}
+
+void areaMenu(List<Area> *& areas, List<Service> *& services){
+    const char * title = "Menu areas";
+    string options[] = {"Agregar", "Modificar cantidad de ventanillas", "Eliminar", "Regresar"};
+    string confirmation;
+    int option = 0;
+
+    do{
+        option = selectOption(title, options, 4);
+        system("cls");
+
+        if(option == 1){
+            addAreas(areas);
+        }
+
+        else if(option == 2){
+            windowsModify(areas);
+        }
+
+        else if(option == 3){
+            cout << "Está seguro de borrar el área ingrese (1) para confirmar: ";
+            getline(cin, confirmation);
+
+            if(confirmation == "1")
+                deleteAreas(areas, services);
+        }
+
+    }while(option != 4);
+}
+
+void addServices(List<Service> *& services, List<Area> * areas){
+    string exit, input, operation, message;
+    int priority = 0;
+
+
+        message = "Ingrese el tipo de servicio: ";
+        operation = enterString(message);
+
+        message = "Ingrese su prioridad: ";
+        input = enterIntNumber(message, 0);
+        priority = stoi(input);
+
+        chooseAreas(areas);
+        Area area = areas->getElement();
+        Service service(operation, priority, area);
+        services->append(service);
+}
+
 int chooseServices(List<Service> *& services){
+    //system("cls");
+    services->goToStart();
+
     int nOperationServ;
-    const char *title = "Areas disponibles"; // título del menú de opciones
+    const char *title = "Servicios disponibles"; // título del menú de opciones
     string options[services->getSize()]; // opciones disponibles de la matriz
 
     for(int i = 0; i < services->getSize(); i++){
@@ -128,173 +399,380 @@ int chooseServices(List<Service> *& services){
     nOperationServ = selectOption(title, options, services->getSize());
     services->goToPos(nOperationServ-1);
 
+    system("cls");
+
     return nOperationServ;
 }
 
-void setUserDate(User &user, List<User> *& users){
-    string exit, input;
-    do{
+void deleteService(List<Service> *& services){
+    int serviceSeleted = chooseServices(services);
 
-        cout << "Ingrese el tipo de usario: ";
-        getline(cin, input);
-
-        user.setUserType(input);
-
-        cout << "\nIngrese su prioridad: ";
-        getline(cin, input);
-
-        user.setPriority(stoi(input));
-
-        users->append(user);
-
-        cout << "\nIngrese cero si desea salir: ";
-        getline(cin, exit);
-
-    }while(exit != "0");
+    services->goToPos(serviceSeleted-1);
+    services->remove();
 }
 
-void setAreas(List<Area> *& areas){
-    string exit, code, description, input;
-    int nWindows;
+void rearrangeService(List<Service> *& services){
+    cout << "\nA continuación se mostrarán los servicios, seleccione el que desea reordenar" << endl;
+    cout << "Presione cualquier tecla para continuar " << endl;
+    getch();
+
+    chooseServices(services);
+    Service service = services->getElement();
+    services->remove();
+
+    cout << "\nA continuación se mostrarán los servicios, seleccione donde lo quiere colocar" << endl;
+    cout << "Presione cualquier tecla para continuar " << endl;
+    getch();
+
+    int pos = chooseServices(services) - 1;
+    services->remove();
+
+    services->goToPos(pos);
+    services->insert(service);
+}
+
+void serviceMenu(List<Service> *& services, List<Area> *& areas){
+    const char * title = "Menu de servicios";
+    string options[] = {"Agregar", "Eliminar", "Reordenar", "Regresar"};
+
+    int option = 0;
+
     do{
+        option = selectOption(title, options, 4);
+        system("cls");
 
-        cout << "Ingrese la descripcion del area: ";
-        getline(cin, description);
+        if(option == 1){
+            addServices(services, areas);
+        }
 
-        cout << "\nIngrese el código del area: ";
-        getline(cin, code);
+        else if(option == 2){
+            deleteService(services);
+        }
 
-        cout << "\nIngrese la cantidad de ventallas: ";
-        getline(cin, input);
-        nWindows = stoi(input);
+        else if(option == 3){
+            rearrangeService(services);
+        }
 
-        Area area(nWindows, code);
-        area.setDescription(description);
+    }while(option != 4);
+}
 
-        areas->append(area);
+void clearStatisticAndQueues(List<User> *& users, List<Service> *& services, List<Area> *& areas){
+    //eliminar datos de las areas
+    areas->goToStart();
+    for(int i = 0; i < areas->getSize(); i++){
+        Area area = areas->getElement();
+        MinHeap<Tiquet> *tiquets = area.getTiquets();
+        tiquets->clear();
 
-        cout << "\nIngrese cero si desea salir: ";
-        getline(cin, exit);
+        MinHeap<Tiquet> *attendedTiquets = area.getAttendTiquets();
+        attendedTiquets->clear();
 
-    }while(exit != "0");
+        List<Window> *windows = area.getWindows();
+        windows->goToStart();
+        for(int j = 0; j < windows->getSize(); j++){
+            Window window = windows->getElement();
+            window.setNAttendedTiquets(0);
+            windows->remove();
+            windows->insert(window);
+            windows->next();
+        }
+
+        area.setTotalTime(0);
+        area.setNTiquets(0);
+        areas->remove();
+        areas->insert(area);
+        areas->next();
+    }
+
+    services->goToStart();
+    for(int i = 0; i < services->getSize(); i++){
+        Service service = services->getElement();
+        service.setNTiquets(0);
+        services->remove();
+        services->insert(service);
+        services->next();
+    }
+
+    users->goToStart();
+    for(int i = 0; i < users->getSize(); i++){
+        User user = users->getElement();
+        user.setNTiquets(0);
+        users->remove();
+        users->insert(user);
+        users->next();
+    }
+
+    nTiquet = 100;
 }
 
 
-void setServices(Service &service, List<Service> *& services, List<Area> * areas){
-    string exit, input;
-    int nAreaDescrip = 0;
+void administrationMenu(List<User> *& users, List<Service> *& services, List<Area> *& areas){
+    int option;
+    const char *title = "Administración"; // título del menú de opciones
+    string options[] = {"Tipos de usuarios", "Áreas", "Servicios disponibles", "Limpiar cola y estadística", "Regresar"}; // opciones disponibles de la matriz
+
     do{
 
-        cout << "\nIngrese el tipo de servicio: ";
-        getline(cin, input);
+        option = selectOption(title, options, 5);
+        system("cls");
 
-        service.setOperation(input);
+        if(option == 1){
+            userTypeMenu(users);
+        }
 
-        cout << "\nIngrese su prioridad: ";
-        getline(cin, input);
+        else if(option == 2){
+            areaMenu(areas, services);
+        }
 
-        service.setPriority(stoi(input));
+        else if(option == 3){
+            serviceMenu(services, areas);
+        }
 
-        nAreaDescrip = chooseAreas(areas);
+        else if(option == 4){
+            clearStatisticAndQueues(users, services, areas);
+        }
 
+    }while(option != 5);
+}
+
+void generateTiquet(List<User> *& users, List<Service> *& services, List<Area> *& areas){
+    chooseUserTypes(users);
+    chooseServices(services);
+
+    User user = users->getElement();
+    Service service = services->getElement();
+
+    //generar prioridad final
+    int userPriority = user.getPriority();
+    int servicePriority = service.getPriority();
+    int finalPriority = userPriority * 10 + servicePriority;
+
+    //generar el consecutivo
+    Area aService = service.getArea();
+    int posArea = areas->indexOf(aService);
+    areas->goToPos(posArea);
+    Area area = areas->getElement();
+    string consecutive = area.getCode() + to_string(nTiquet);
+
+    int second = getNCurrentSeconds();
+    Tiquet tiquet(second, consecutive, finalPriority);
+    area.addTiquet(tiquet);
+    incNTiquet();
+
+    user.increaseNTiquets();
+    service.increaseNTiquets();
+    area.increaseNTiquets();
+    users->remove();
+    services->remove();
+    users->insert(user);
+    services->insert(service);
+
+    cout << posArea << " " << area.getTotalTime() << endl;
+    getch();
+    areas->remove();
+    areas->insert(area);
+}
+
+void tiquetMenu(List<User> * users, List<Service> *& services, List<Area> *& areas){
+
+    const char *title = "Menu de tiquetes"; // título del menú de opciones
+    string options[] = {"Seleccionar tipo de cliente y servicio", "Regresar"}; // opciones disponibles de la matriz
+    int option = 0;
+
+    do {
+
+        option = selectOption(title, options, 2);
+
+        if(option == 1){
+            system("cls");
+            generateTiquet(users, services, areas);
+        }
+
+    }while(option != 2);
+}
+
+int chooseWindow(Area area){
+    system("cls");
+
+    List<Window> *windows = area.getWindows();
+    int nWindows = windows->getSize();
+    int nChooseWindow;
+
+    const char *title = "Ventanillas disponibles"; // título del menú de opciones
+    string options[windows->getSize()]; // opciones disponibles de la matriz
+
+    windows->goToStart();
+    for(int i = 0; i < nWindows; i++){
+        Window window = windows->getElement();
+        string windowCode = window.getCode();
+        options[i] = windowCode;
+        windows->next();
+    }
+
+    nChooseWindow = selectOption(title, options, nWindows);
+    windows->goToPos(nChooseWindow-1);
+
+    system("cls");
+
+    return nChooseWindow;
+}
+
+void attend(List<Area> *& areas){
+    int nChooseArea, nChooseWindow;
+
+    nChooseArea = chooseAreas(areas);
+    areas->goToPos(nChooseArea-1);
+    Area area = areas->getElement();
+
+    nChooseWindow = chooseWindow(area);
+    List<Window> *windows = area.getWindows();
+    windows->goToPos(nChooseWindow-1);
+    Window window = windows->getElement();
+    string windowCode = window.getCode();
+
+    MinHeap<Tiquet> *tiquets = area.getTiquets();
+    MinHeap<Tiquet> *attendedTiquets = area.getAttendTiquets();
+
+    if(tiquets->getSize() > 0){
+        Tiquet tiquetToAttend = tiquets->removeFirst();
+        tiquetToAttend.setWindow(windowCode);
+
+        for(int i = 0; i < attendedTiquets->getSize(); i++){
+            Tiquet attendedTiquet = attendedTiquets->getElement(i);
+
+            if(attendedTiquet.getWindow() == windowCode){
+                attendedTiquets->remove(i);
+            }
+        }
+        window.increaseNAttendedTiquets();
+        windows->remove();
+        windows->insert(window);
+
+        int second = getNCurrentSeconds();
+        int finalSeconds = second - tiquetToAttend.getISeconds();
+        area.addTime(finalSeconds);
+
+        area.addAttendTiquet(tiquetToAttend);
+        area.increseaNTiquetsAttended();
+        areas->remove();
+        areas->insert(area);
+    }
+    else{
+        cout << "\nNo hay usuarios a la espera" << endl;
+        getch();
+        cout << "\nPresione cualquier tecla para continuar " << endl;
+    }
+}
+
+void systemStatistics(List<Area> *areas, List<Service> *services, List<User> *users){
+    cout << "\nEstadísticas del sistema " << endl;
+
+    cout << "\n------------------------------------------------------------------------" << endl;
+    areas->goToStart();
+    for(int i = 0; i < areas->getSize(); i++){
         Area area = areas->getElement();
 
-        service.setArea(area);
+        cout << "\nArea: " << area.getDescription() << endl;
+        cout << "Tiempo promedio de espera: " << area.getAverageTime() << " segundos" << endl;
+        cout << "Cantidad de tiquetes dispensados: " << area.getNTiquets() << endl;
 
-        services->append(service);
+        //cout << "\n------------------------------------------------------------------------" << endl;
+        cout << "\nCantidad de tiquetes antendidos por ventanilla" << endl;
+        List<Window> *windows = area.getWindows();
+        windows->goToStart();
+        for(int j = 0; j < windows->getSize(); j++){
+            Window window = windows->getElement();
+            cout << "\nVentanilla: " << window.getCode() << endl;
+            cout << "Cantidad de tiquetes atendidos: " << window.getAttendedTiquets() << endl;
 
-        cout << "\nIngrese cero si desea salir: ";
-        getline(cin, exit);
+            windows->next();
+        }
 
-    }while(exit != "0");
+        areas->next();
+    }
+
+    cout << "\n------------------------------------------------------------------------" << endl;
+    services->goToStart();
+    for(int i = 0; i < services->getSize(); i++){
+        Service service = services->getElement();
+
+        cout << "\nServicio: " << service.getOperation() << endl;
+        cout << "Cantidad de tiquetes solicitados: " << service.getNTiquets() << endl;
+
+        services->next();
+    }
+
+    cout << "\n------------------------------------------------------------------------" << endl;
+    users->goToStart();
+    for(int i = 0; i < users->getSize(); i++){
+        User user = users->getElement();
+
+        cout << "\nUsuario: " << user.getUserType() << endl;
+        cout << "Cantidad de tiquetes emitidos: " << user.getNTiquets() << endl;
+
+        users->next();
+    }
+
+    cout << "\nPresione cualquier tecla para continuar " << endl;
+    getch();
 }
 
+void mainMenu(List<User> *users, List<Service> *services, List<Area> *areas){
 
-int main1(){
+    int option;
+    const char *title = "Menu principal"; // título del menú de opciones
+    string options[] = {"Estado de las colas", "Tiquetes", "Atender", "Administración", "Estadísticas del Sistemas", "Salir"}; // opciones disponibles de la matriz
 
-    List<User> *users;
-    List<string> *windows;
-    MinHeap<Tiquet> *queues;
+    do{
+        try{
 
+            option = selectOption(title, options, 6);
+            system("cls");
 
-    User user;
+            if(option == 1){
+                areas->goToStart();
+                queueStatus(areas);
+            }
 
-    user.setUserType("Regular");
-    user.setPriority(1);
-    cout << user.getUserType();
+            if(option == 2){
+                tiquetMenu(users, services, areas);
+            }
 
-    Tiquet tiquet;
-    tiquet.setConsecutive("C100");
-    cout << tiquet.getConsecutive() << endl;
-    tiquet.setSeconds(15);
-    tiquet.setFPriority(15);
+            else if(option == 3){
+                attend(areas);
+            }
 
-    Area area(5, "CA");
-    area.setDescription("Cajas");
-    area.addTiquet(tiquet);
+            else if(option == 4){
+                administrationMenu(users, services, areas);
+            }
 
-    Service service(area);
-    service.setOperation("Deposito");
-    service.setPriority(2);
+            else if(option == 5){
+                systemStatistics(areas, services, users);
+            }
 
-    windows = area.getWindows();
-    windows->print();
+        }
 
-    queues = area.getQueues();
-    //cout << queues->removeFirst() << endl;
-    queues->print();
+        catch(const runtime_error &e){
+            cerr << "\nUps, algo salió mal \n" << "Error: " << e.what() <<"\nPresione cualquier tecla para continuar" << endl;   //se manda el error correspondiente
+            getch();
+        }
 
-    return 0;
+    }while(option != 6);
 }
 
 int main(){
+
+    setlocale(LC_ALL, "spanish");
 
     List<User> *users = new ArrayList<User>;
     List<Service> *services = new ArrayList<Service>;
     List<Area> *areas = new ArrayList<Area>;
 
-    List<string> *windows;
-    MinHeap<Tiquet> *queues;
+    mainMenu(users, services, areas);
 
-
-    User user;
-    setUserDate(user, users);
-    users->print();
-
-    chooseUserTypes(users);
-
-    User user1 = users->getElement();
-    cout << user1.getUserType();
-    getch();
-
-    system("cls");
-
-
-    Area area;
-    setAreas(areas);
-    areas->print();
-    getch();
-
-    chooseAreas(areas);
-    Area area1 = areas->getElement();
-    //area1.getWindows()->print();
-    getch();
-    system("cls");
-
-
-    Service service;
-    setServices(service, services, areas);
-    chooseServices(services);
-    Service service1 = services->getElement();
-    cout << service1.getOperation();
-
-    /*
-    user.setUserType("Regular");
-    user.setPriority(1);
-    cout << user.getUserType();
-    */
-
-
+    delete users;
+    delete services;
+    delete areas;
 
     return 0;
 }
