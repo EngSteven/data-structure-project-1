@@ -1,3 +1,11 @@
+/*
+    - Estructura de datos genérica que usa un arreglo dinámico para guardar elementos genéricos semi-ordenados ascendentemente.
+    - Usa lógica de árboles representado por un arreglo
+    - Contiene un arreglo genérico dinámico, un máximo de elementos y un tamaño actual.
+    - Se encarga de insertar elementos, mantenerlos semi-ordenamos ascendentemente y remover cada menor actual.
+    - Escrito por el profesor Mauricio Áviles.
+    - Modificado por Steven Sequira y Jefferson Salas.
+*/
 #ifndef MINHEAP_H
 #define MINHEAP_H
 

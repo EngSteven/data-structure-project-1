@@ -40,6 +40,7 @@
 		<Unit filename="include/MinHeap.h" />
 		<Unit filename="include/Node.h" />
 		<Unit filename="include/Service.h" />
+		<Unit filename="include/SortedArrayList.h" />
 		<Unit filename="include/Tiquet.h" />
 		<Unit filename="include/User.h" />
 		<Unit filename="include/Usuario.h" />
