@@ -13,6 +13,7 @@
 #include "Service.h"
 #include "Area.h"
 #include "Tiquet.h"
+#include "SortedArrayList.h"
 
 #define KEY_UP 72
 #define KEY_DOWN 80
@@ -760,7 +761,7 @@ int main(){
 
     setlocale(LC_ALL, "spanish");
 
-    List<User> *users = new ArrayList<User>;
+    SortedArrayList<User> *users = new SortedArrayList<User>();
     List<Service> *services = new ArrayList<Service>;
     List<Area> *areas = new ArrayList<Area>;
 

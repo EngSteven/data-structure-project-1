@@ -1,3 +1,11 @@
+/*
+    - Clase que genérica abstracta que define las diversas funcionalidades a implementar.
+    - Se encarga de declar los diversas funciones que deben implementar las clases derivadas de esta.
+    - Escrito por el profesor Mauricio Áviles.
+    - Modificado por Steven Sequira y Jefferson Salas.
+*/
+
+
 #ifndef LIST_H
 #define LIST_H
 
@@ -15,6 +23,7 @@ public:
     virtual E remove() = 0;
     virtual void clear() = 0;
     virtual E getElement() = 0;
+    virtual int getPos() =0;
     virtual void goToStart() = 0;
     virtual void goToEnd() = 0;
     virtual void goToPos(int pos) = 0;
@@ -25,12 +34,6 @@ public:
     virtual int getSize() = 0;
     virtual void print() = 0;
     virtual int  indexOf(E element) = 0;
-
-
-    /*virtual bool contains(E element) = 0;
-    virtual void extend(List<E> *list) = 0;
-    virtual void reverse() = 0;
-    virtual bool equals(List<E> *list) = 0;*/
 };
 
 #endif // LIST_H

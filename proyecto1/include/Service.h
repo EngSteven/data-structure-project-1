@@ -1,3 +1,11 @@
+/*
+    - Clase que representa los servicios creados en el programa por el usuario.
+    - Contiene una operación que representa su funcionalidad, una prioridad, un área asociada y la cantidad de tiquetes dispensados.
+    - Se encarga de brindar su prioridad a los tiquetes dispensados relacionados, para mantener un orden de atención.
+    - Escrito por Steven Sequeira y Jefferson Salas.
+    - Modificado por Steven Sequira y Jefferson Salas.
+*/
+
 #ifndef SERVICE_H
 #define SERVICE_H
 

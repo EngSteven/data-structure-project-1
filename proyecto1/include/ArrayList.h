@@ -1,3 +1,11 @@
+/*
+    - Estructura de datos genérica que usa un arreglo dinámico para guardar elementos genéricos y que deriva de la clase List.
+    - Contiene un arreglo genérico dinámico, un tamaño máximo, una posición y tamaño actual.
+    - Se encarga de insertar, modificar, remover, guardar y recorrer los elementos ingresados.
+    - Escrito por el profesor Mauricio Áviles.
+    - Modificado por Steven Sequira y Jefferson Salas.
+*/
+
 #ifndef ARRAYLIST_H
 #define ARRAYLIST_H
 
@@ -19,6 +27,19 @@ private:
     int max;
     int pos;
     int size;
+
+    //duplica la el largo de la lista original
+    void duplicateArrayList(){
+        max *= 2;
+        E *temp = new E[max];
+
+        for(int i = 0; i < size; i++){
+            temp[i] = elements[i];
+        }
+
+        delete [] elements;
+        elements = temp;
+    }
 
 public:
     ArrayList(int max = DEFAULT_MAX_SIZE){
@@ -48,7 +69,6 @@ public:
 
     void append(E element){
         if(size == max){
-            //throw runtime_error("Error: List is full");
             duplicateArrayList();
         }
 
@@ -90,6 +110,10 @@ public:
         }
 
         return elements[pos];
+    }
+
+    int getPos() {
+        return pos;
     }
 
     void goToStart(){
@@ -139,17 +163,6 @@ public:
         cout << " ]" << endl;
     }
 
-    //metodos extras
-    //recibe un elemento y retorna true en caso de encontrarlo dentro de la lista
-    bool contains(E element){
-        for(int i = 0; i < size; i++){
-            if(elements[i] == element){
-                return true;
-            }
-        }
-        return false;
-    }
-
     //recibe un elemento e indica la posicion en la que se encuentra
     int indexOf(E element){
         for(int i = 0; i < size; i++){
@@ -160,75 +173,6 @@ public:
 
         return -1;
     }
-
-    //recibe una lista y se la agrega al fina de la lista original
-    void extend(List<E> *list){
-        int listPos = list->indexOf(list->getElement());    //se guarda la posición actual de la lista recibida
-
-        if(list->getSize() + size > max){
-            throw runtime_error("Size is not enough");
-        }
-
-        for(list->goToStart(); !list->atEnd(); list->next()){
-            append(list->getElement());
-        }
-
-        list->goToPos(listPos);                             //se regresa la posición actual de la lista recibida
-    }
-
-    //invierte el orden de la lista
-    void reverse(){
-
-        E *temp = new E[max];
-        int sizeTemp = size - 1;
-
-        for(int i = 0; i < size; i++){
-            temp[i] = elements[sizeTemp];
-            sizeTemp--;
-        }
-
-        elements = temp;
-    }
-
-    //duplica la el largo de la lista original
-    void duplicateArrayList(){
-        max *= 2;
-        E *temp = new E[max];
-
-        for(int i = 0; i < size; i++){
-            temp[i] = elements[i];
-        }
-
-        delete [] elements;
-        elements = temp;
-    }
-
-    //recibe una lista y retorna true en caso de ser igual a la lista original, false de lo contrario
-    bool equals(List<E> *list){
-        bool isEquals = true;
-        int listPos = list->indexOf(list->getElement());    //se guarda la posición actual de la lista recibida
-
-
-        if(list->getSize() == size){
-            list->goToStart();
-            for(int i = 0; i < size; i++){
-                if(elements[i] != list->getElement()){
-                    isEquals = false;
-                    break;
-                }
-                list->next();
-            }
-        }
-        else{
-            isEquals = false;
-        }
-
-        list->goToPos(listPos);                             //se regresa la posición actual de la lista recibida
-
-        return isEquals;
-    }
-
-
 };
 
 #endif // ARRAYLIST_H

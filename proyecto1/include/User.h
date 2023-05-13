@@ -1,3 +1,11 @@
+/*
+    - Clase que representa los diferentes tipos de usuarios del sistema, creados por el usuario.
+    - Contiene el tipo de usuario que lo identifica, una prioridad para ser atendido y la cantidad de tiquetes asociados a este.
+    - Se encarga de brindar su prioridad a los tiquetes dispensados relacionados, para mantener un orden de atención.
+    - Escrito por Steven Sequeira y Jefferson Salas.
+    - Modificado por Steven Sequira y Jefferson Salas.
+*/
+
 #ifndef USER_H
 #define USER_H
 

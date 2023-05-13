@@ -1,3 +1,12 @@
+/*
+    - Clase que representa los diversos tiquetes dispensados por el sistema.
+    - Contiene los segundos en los que fue dispensado, un consecutivo para indentificarlo, una prioridad final calculada usando la prioridad del servicio y
+      de usuario relacionado y una ventanilla en caso de ser atendido.
+    - Se encarga de decidir en que orden se va atender un tipo de usuario para un servicio de un área.
+    - Escrito por Steven Sequeira y Jefferson Salas.
+    - Modificado por Steven Sequira y Jefferson Salas.
+*/
+
 #ifndef TIQUET_H
 #define TIQUET_H
 

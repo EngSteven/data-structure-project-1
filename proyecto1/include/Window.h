@@ -1,3 +1,11 @@
+/*
+    - Clase que representa las diferentes ventanillas de un área del sistema.
+    - Contiene un código relacionado a su área y la cantidad de tiquetes atendidos por esta.
+    - Se encarga de atender los tiquetes del sistema.
+    - Escrito por Steven Sequeira y Jefferson Salas.
+    - Modificado por Steven Sequira y Jefferson Salas.
+*/
+
 #ifndef WINDOW_H
 #define WINDOW_H
 
