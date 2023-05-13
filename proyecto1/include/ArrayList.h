@@ -23,7 +23,7 @@ private:
 public:
     ArrayList(int max = DEFAULT_MAX_SIZE){
         if(max < 1){
-            throw runtime_error("ERROR: Invalid max size.");
+            throw runtime_error("Invalid max size.");
         }
         elements = new E[max];
         size = pos = 0;
@@ -58,11 +58,11 @@ public:
 
     E remove(){
         if(size == 0){
-            throw runtime_error("Error: List is empty");
+            throw runtime_error("List is empty");
         }
 
         if(pos == size){
-            throw runtime_error("Error: No current element");
+            throw runtime_error("No current element");
 
         }
 
@@ -86,7 +86,7 @@ public:
         }
 
         if(pos == size){
-            throw runtime_error("Error: no current element");
+            throw runtime_error("No current element");
         }
 
         return elements[pos];
@@ -102,7 +102,7 @@ public:
 
     void goToPos(int pos){
         if(pos < 0 || pos > size){
-            throw runtime_error("Error: index out bounds");
+            throw runtime_error("Index out bounds");
         }
         this->pos = pos;
     }
@@ -166,7 +166,7 @@ public:
         int listPos = list->indexOf(list->getElement());    //se guarda la posición actual de la lista recibida
 
         if(list->getSize() + size > max){
-            throw runtime_error("Error: the size is not enough");
+            throw runtime_error("Size is not enough");
         }
 
         for(list->goToStart(); !list->atEnd(); list->next()){

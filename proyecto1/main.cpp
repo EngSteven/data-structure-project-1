@@ -18,7 +18,6 @@
 #define KEY_DOWN 80
 #define ENTER 13
 //#define N_MENU_OPTIONS 12
-//#define N_MAX_RAND_NUMBERS 99
 
 using namespace std;
 
@@ -508,8 +507,8 @@ void clearStatisticAndQueues(List<User> *& users, List<Service> *& services, Lis
 
 void administrationMenu(List<User> *& users, List<Service> *& services, List<Area> *& areas){
     int option;
-    const char *title = "Administración"; // título del menú de opciones
-    string options[] = {"Tipos de usuarios", "Áreas", "Servicios disponibles", "Limpiar cola y estadística", "Regresar"}; // opciones disponibles de la matriz
+    const char *title = "Administración";
+    string options[] = {"Tipos de usuarios", "Áreas", "Servicios disponibles", "Limpiar colas y estadísticas", "Regresar"}; // opciones disponibles de la matriz
 
     do{
 
@@ -542,7 +541,7 @@ void generateTiquet(List<User> *& users, List<Service> *& services, List<Area> *
     User user = users->getElement();
     Service service = services->getElement();
 
-    //generar prioridad final
+    //calcular prioridad final
     int userPriority = user.getPriority();
     int servicePriority = service.getPriority();
     int finalPriority = userPriority * 10 + servicePriority;
@@ -562,20 +561,17 @@ void generateTiquet(List<User> *& users, List<Service> *& services, List<Area> *
     user.increaseNTiquets();
     service.increaseNTiquets();
     area.increaseNTiquets();
+
     users->remove();
     services->remove();
     users->insert(user);
     services->insert(service);
-
-    cout << posArea << " " << area.getTotalTime() << endl;
-    getch();
     areas->remove();
     areas->insert(area);
 }
 
 void tiquetMenu(List<User> * users, List<Service> *& services, List<Area> *& areas){
-
-    const char *title = "Menu de tiquetes"; // título del menú de opciones
+    const char *title = "Menú de tiquetes";
     string options[] = {"Seleccionar tipo de cliente y servicio", "Regresar"}; // opciones disponibles de la matriz
     int option = 0;
 
@@ -596,10 +592,10 @@ int chooseWindow(Area area){
 
     List<Window> *windows = area.getWindows();
     int nWindows = windows->getSize();
-    int nChooseWindow;
+    int nChosenWindow;
 
-    const char *title = "Ventanillas disponibles"; // título del menú de opciones
-    string options[windows->getSize()]; // opciones disponibles de la matriz
+    const char *title = "Ventanillas disponibles";
+    string options[windows->getSize()];
 
     windows->goToStart();
     for(int i = 0; i < nWindows; i++){
@@ -609,24 +605,24 @@ int chooseWindow(Area area){
         windows->next();
     }
 
-    nChooseWindow = selectOption(title, options, nWindows);
-    windows->goToPos(nChooseWindow-1);
+    nChosenWindow = selectOption(title, options, nWindows);
+    windows->goToPos(nChosenWindow-1);
 
     system("cls");
 
-    return nChooseWindow;
+    return nChosenWindow;
 }
 
 void attend(List<Area> *& areas){
-    int nChooseArea, nChooseWindow;
+    int nChosenArea, nChosenWindow;
 
-    nChooseArea = chooseAreas(areas);
-    areas->goToPos(nChooseArea-1);
+    nChosenArea = chooseAreas(areas);
+    areas->goToPos(nChosenArea-1);
     Area area = areas->getElement();
 
-    nChooseWindow = chooseWindow(area);
+    nChosenWindow = chooseWindow(area);
     List<Window> *windows = area.getWindows();
-    windows->goToPos(nChooseWindow-1);
+    windows->goToPos(nChosenWindow-1);
     Window window = windows->getElement();
     string windowCode = window.getCode();
 

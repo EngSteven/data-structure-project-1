@@ -1,17 +1,11 @@
 #ifndef AREA_H
 #define AREA_H
 
-#define N_COLUMNS_WINDOWS 2
-
 #include <string>
 #include "ArrayList.h"
 #include "MinHeap.h"
 #include "Tiquet.h"
 #include "Window.h"
-#include "conio.h"
-
-
-using namespace std;
 
 class Area{;
 public:
@@ -47,7 +41,6 @@ public:
     }
 
     ~Area(){
-
     }
 
     void addTime(int time){
