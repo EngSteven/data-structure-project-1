@@ -4,7 +4,7 @@
       y promedio correspondiente a la diferencia entre el tiempo de dispención y atención de los tiquetes y su cantidad.
     - Se encarga de gestionar los tiquetes para los tipos de usuarios y servicios, según sus prioridades, mediante las diversas ventanillas que contenga
     - Escrito por Steven Sequeira y Jefferson Salas
-    - Modificado por
+    - Modificado por Steven Sequeira Araya y Jefferson Sala
 */
 
 #ifndef AREA_H

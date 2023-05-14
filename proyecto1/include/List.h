@@ -34,6 +34,7 @@ public:
     virtual int getSize() = 0;
     virtual void print() = 0;
     virtual int  indexOf(E element) = 0;
+    virtual int getMax() = 0;
 };
 
 #endif // LIST_H

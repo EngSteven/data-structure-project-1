@@ -173,6 +173,10 @@ public:
 
         return -1;
     }
+
+    int getMax(){
+        return max;
+    }
 };
 
 #endif // ARRAYLIST_H

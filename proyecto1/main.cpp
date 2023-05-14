@@ -1,3 +1,11 @@
+/*
+    - Programa principal del proyecto de control de colas de prioridad.
+    - Este programa recrea la funcionalidad de sistema en el que se tienen prioridades y según sus valores así se van atendiendo
+    - Esto se logra, mediante las colas de prioridad, que perminten ordenar los diversos componentes, configurables, por prioriadad y llevar un control apropiado
+    - Escrito por Steven Sequeira y Jefferson Salas
+    - Modificado por Steven Sequeira Araya y Jefferson Salas
+*/
+
 #include <windows.h>
 #include <conio.h>
 #include <stdlib.h>
@@ -18,7 +26,6 @@
 #define KEY_UP 72
 #define KEY_DOWN 80
 #define ENTER 13
-//#define N_MENU_OPTIONS 12
 
 using namespace std;
 
@@ -412,21 +419,25 @@ void deleteService(List<Service> *& services){
 }
 
 void rearrangeService(List<Service> *& services){
+    string message, input;
+    int pos = 0;
+
     cout << "\nA continuación se mostrarán los servicios, seleccione el que desea reordenar" << endl;
     cout << "Presione cualquier tecla para continuar " << endl;
     getch();
 
     chooseServices(services);
     Service service = services->getElement();
-    services->remove();
 
-    cout << "\nA continuación se mostrarán los servicios, seleccione donde lo quiere colocar" << endl;
-    cout << "Presione cualquier tecla para continuar " << endl;
-    getch();
+    message = "Ingrese la posicion en la que desea colocar el servicio: ";
+    input = enterIntNumber(message, 0);
+    pos = stoi(input);
 
-    int pos = chooseServices(services) - 1;
-    services->remove();
-
+    if(pos <= services->getSize()){
+        services->remove();
+        if(pos > 0)
+            pos--;
+    }
     services->goToPos(pos);
     services->insert(service);
 }
@@ -679,9 +690,7 @@ void systemStatistics(List<Area> *areas, List<Service> *services, List<User> *us
         windows->goToStart();
         for(int j = 0; j < windows->getSize(); j++){
             Window window = windows->getElement();
-            cout << "\nVentanilla: " << window.getCode() << endl;
-            cout << "Cantidad de tiquetes atendidos: " << window.getAttendedTiquets() << endl;
-
+            cout << "\nVentanilla " << window.getCode() << ": " << window.getAttendedTiquets() << endl;
             windows->next();
         }
 

@@ -43,7 +43,6 @@
 		<Unit filename="include/SortedArrayList.h" />
 		<Unit filename="include/Tiquet.h" />
 		<Unit filename="include/User.h" />
-		<Unit filename="include/Usuario.h" />
 		<Unit filename="include/Window.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>

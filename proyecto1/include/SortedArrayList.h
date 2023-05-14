@@ -77,6 +77,10 @@ public:
     int indexOf(E element){
         return arrayList->indexOf(element);
     }
+
+    int getMax(){
+        return arrayList->getMax();
+    }
 };
 
 #endif // SORTEDARRAYLIST_H
